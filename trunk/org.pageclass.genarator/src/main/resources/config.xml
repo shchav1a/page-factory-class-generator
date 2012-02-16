@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pages>
-	<page value="http://nfo-demo:9081/neoflex.ufo.web/login.html" classname="LoginPage">
+	<page value="http://www.google.com">
+	<classname value="GooglePage"/>
 		<actions>
-			<action type="fill" path="//input[@id='j_username']" text="OperatorSpecialist_GO1"/>
-			<action type="fill" path="//input[@id='j_password']" text="123"/>
-			<action type="click" path="//input[@id='Button3']"/>
-			<action  type="wait" time="10"/>
+			<action type="fill" path="//input[@class='gsfi']" text="test"/>
+			<action type="click" path="//input[@name='btnK']"/>
+			<action  type="wait" time="10000"/>
 		</actions>
 		<target tag="input" />
 		<target tag="table" />
