@@ -1,0 +1,12 @@
+#labels Featured,Phase-Deploy
+#Short manual how to use
+
+= Introduction =
+
+In this article I try to explain how to use this project.
+
+
+= Details =
+
+First you must download latest stable build from here.
+
