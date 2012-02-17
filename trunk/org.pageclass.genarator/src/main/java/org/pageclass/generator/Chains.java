@@ -1,50 +1,31 @@
 package org.pageclass.generator;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
+import java.io.IOException;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 public class Chains {
-
-	public static void doAction(String s, WebDriver driver) {
-		System.out.println("do action");
+	public static HtmlPage doAction(String s, HtmlPage page) throws IOException {
 		XmlManager xml = new XmlManager();
+		HtmlPage final_page=null;
 		int action_count = xml.getSettings(
 				"//page[@value='" + s + "']/actions/action").size();
-		System.out.println(action_count);
 		for (int i = 1; i < action_count+1; i++) {
 			if (xml.getSettings(
 					"//page[@value='" + s + "']/actions/action[" + i
 							+ "]/@type").get(0).equals("fill")) {
-				driver.findElement(
-						By.xpath(xml.getSettings(
-								"//page[@value='" + s + "']/actions/action["
-										+ i + "]/@path").get(0))).sendKeys(
-						xml.getSettings(
-								"//page[@value='" + s + "']/actions/action["
-										+ i + "]/@text").get(0));
+			    HtmlInput el=(HtmlInput) page.getFirstByXPath(xml.getSettings("//page[@value='" + s + "']/actions/action["+ i + "]/@path").get(0));
+				el.setValueAttribute(xml.getSettings("//page[@value='" + s + "']/actions/action["+ i + "]/@text").get(0));
 			}
 			if (xml.getSettings(
 					"//page[@value='" + s + "']/actions/action[" + i
 							+ "]/@type").get(0).equals("click")) {
-				driver.findElement(
-						By.xpath(xml.getSettings(
-								"//page[@value='" + s + "']/actions/action["
-										+ i + "]/@path").get(0))).click();
-			}
-			if (xml.getSettings(
-					"//page[@value='" + s + "']/actions/action[" + i
-							+ "]/@type").get(0).equals("wait")) {
-
-				try {
-					Thread.sleep(Long.parseLong(xml.getSettings(
-							"//page[@value='" + s + "']/actions/action[" + i
-									+ "]/@time").get(0)));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-
+				HtmlElement el=(HtmlElement) page.getFirstByXPath(xml.getSettings("//page[@value='" + s + "']/actions/action["+ i + "]/@path").get(0));
+				final_page=el.click();
 			}
 		}
+		return final_page;
 	}
 
 }
