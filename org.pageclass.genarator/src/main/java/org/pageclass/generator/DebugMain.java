@@ -7,11 +7,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 public class DebugMain {
 
@@ -19,11 +18,13 @@ public class DebugMain {
 	 * @param args
 	 * @throws IOException
 	 */
+	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws Exception {
 		XmlManager xml = new XmlManager();
-		HtmlUnitDriver driver = new HtmlUnitDriver(true);
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-		driver.manage().timeouts().setScriptTimeout(30, TimeUnit.SECONDS);
+		WebClient webClient = new WebClient();
+		 webClient.setJavaScriptEnabled(true);
+		 webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+		 webClient.waitForBackgroundJavaScript(30000);
 		Map<String, List<String>> tags = new HashMap<String, List<String>>();
 		List<String> pages = xml.getSettings("//page/@value");
 		int i = 0;
@@ -42,31 +43,26 @@ public class DebugMain {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(test, true));
 			bw.write("import org.openqa.selenium.WebElement;\n import org.openqa.selenium.support.FindBy;\n import org.openqa.selenium.support.How; \n");
 			bw.write("public final class "+filename+" {\n");
-			driver.get(s);
-			Chains.doAction(s,driver);
+			HtmlPage page =webClient.getPage(s);
+			page=Chains.doAction(s,page);
 			for (String st : tags.get(s)) {
-				List<WebElement> elements = driver.findElements(By.xpath("//"
-						+ st));
+				List<HtmlElement> elements = (List<HtmlElement>) page.getByXPath("//"
+							+ st);
 				int j=0;
-				for (WebElement e : elements) {
+				for (HtmlElement e : elements) {
+					String id=e.getId();
+					String res="";
+					if(!id.isEmpty()){
+						id="@id='"+id+"'";
+						res="[ "+id+" ]";
+					}
 					bw.write("@FindBy(how = How.XPATH, using = \"");
 					bw.write("//"
-							+ e.toString().replaceFirst(" ", "[@")
-									.replaceAll(" ", " and @")
-									.replaceAll("<", "").replaceAll(">", "]")
-									.replaceAll(" and @/", "")
-									.replaceAll("\"", "'"));
+							+e.getCanonicalXPath()+res);		
 					bw.write("\")\n");
 					bw.write("WebElement "+st+j+";\n");
 					j++;
 				}
-
-				/*
-				 * System.out .println("//" + elements.get(0).toString()
-				 * .replaceFirst(" ", "[@") .replaceAll(" ", " and @")
-				 * .replaceAll("<", "") .replaceAll(">", "]")
-				 * .replaceAll(" and @/", ""));
-				 */
 			}
 			bw.write("}");
 			bw.close();
