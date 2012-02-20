@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pages>
-	<page value="http://www.google.com">
-	<classname value="GooglePage"/>
+	<page value="http://www.bing.com">
+	<classname value="BingPage"/>
 		<actions>
-			<action type="fill" path="//input[@class='gsfi']" text="test"/>
-			<action type="click" path="//input[@name='btnK']"/>
-			<action  type="wait" time="10000"/>
+		<action type="fill" path="//input[@name='q']" text="test"/> 
+		<action type="click" path="//input[@name='go']"/>
 		</actions>
-		<target tag="input" />
+		<target tag="div" />
 		<target tag="table" />
 		<target tag="form" />
 	</page>
