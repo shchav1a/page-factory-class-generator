@@ -57,7 +57,7 @@ public class DebugMain {
 						res="[ "+id+" ]";
 					}
 					bw.write("@FindBy(how = How.XPATH, using = \"");
-					bw.write("//"
+					bw.write(""
 							+e.getCanonicalXPath()+res);		
 					bw.write("\")\n");
 					bw.write("WebElement "+st+j+";\n");
