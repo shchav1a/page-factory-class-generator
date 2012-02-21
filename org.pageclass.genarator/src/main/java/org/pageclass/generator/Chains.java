@@ -8,7 +8,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 public class Chains {
 	public static HtmlPage doAction(String s, HtmlPage page) throws IOException {
 		XmlManager xml = new XmlManager();
-		HtmlPage final_page = null;
+		HtmlPage final_page = page;
 		int action_count = xml.getSettings(
 				"//page[@value='" + s + "']/actions/action").size();
 		try {

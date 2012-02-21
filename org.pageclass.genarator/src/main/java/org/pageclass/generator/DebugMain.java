@@ -48,6 +48,7 @@ public class DebugMain {
 			for (String st : tags.get(s)) {
 				List<HtmlElement> elements = (List<HtmlElement>) page.getByXPath("//"
 							+ st);
+				
 				int j=0;
 				for (HtmlElement e : elements) {
 					String id=e.getId();
