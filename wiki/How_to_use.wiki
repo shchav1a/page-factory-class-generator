@@ -9,7 +9,7 @@ In this article I try to explain how to use this project.
   *First you must download latest stable build from here.
   *Unzip it somewhere in your system.
   *Run start.bat file.
-  *In result you will see comand window with debug information, and as the end generator create some .java class files.
+  In result you will see comand window with debug information, and as the end generator create some .java class files.
 
 = config.xml =
 In this file you told generator what pages he must visit, what tags from that pages you need and what you must do before get this tags.
