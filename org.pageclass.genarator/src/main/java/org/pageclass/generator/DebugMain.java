@@ -55,12 +55,7 @@ public class DebugMain {
 						.getByXPath("//" + st);
 
 				for (HtmlElement e : elements) {
-					//String id = e.getId();
-					//String res = "";
-					//if (!id.isEmpty()) {
-						//id = "@id='" + id + "'";
-						//res = "[ " + id + " ]";
-					//}
+					bw.write("/** alternative xpath=//"+st+"*/\n");
 					bw.write("@FindBy(how = How.XPATH, using = \"");
 					bw.write("" + e.getCanonicalXPath());
 					bw.write("\")\n");
