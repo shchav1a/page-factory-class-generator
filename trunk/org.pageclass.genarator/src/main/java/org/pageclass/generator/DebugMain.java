@@ -22,7 +22,7 @@ public class DebugMain {
 	public static void main(String[] args) throws Exception {
 		XmlManager xml = new XmlManager();
 		WebClient webClient = new WebClient();
-		 webClient.setJavaScriptEnabled(true);
+		 webClient.setJavaScriptEnabled(Boolean.parseBoolean(xml.getSettings("//javascript/@value").get(0)));
 		 webClient.setAjaxController(new NicelyResynchronizingAjaxController());
 		 webClient.waitForBackgroundJavaScript(30000);
 		Map<String, List<String>> tags = new HashMap<String, List<String>>();
@@ -43,13 +43,16 @@ public class DebugMain {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(test, true));
 			bw.write("import org.openqa.selenium.WebElement;\n import org.openqa.selenium.support.FindBy;\n import org.openqa.selenium.support.How; \n");
 			bw.write("public final class "+filename+" {\n");
+			
 			HtmlPage page =webClient.getPage(s);
 			page=Chains.doAction(s,page);
+			
+			int j=0;
 			for (String st : tags.get(s)) {
 				List<HtmlElement> elements = (List<HtmlElement>) page.getByXPath("//"
 							+ st);
 				
-				int j=0;
+				
 				for (HtmlElement e : elements) {
 					String id=e.getId();
 					String res="";
@@ -61,7 +64,7 @@ public class DebugMain {
 					bw.write(""
 							+e.getCanonicalXPath()+res);		
 					bw.write("\")\n");
-					bw.write("WebElement "+st+j+";\n");
+					bw.write("WebElement "+st.subSequence(0, st.indexOf("["))+j+";\n");
 					j++;
 				}
 			}
