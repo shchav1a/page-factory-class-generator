@@ -22,9 +22,10 @@ public class DebugMain {
 	public static void main(String[] args) throws Exception {
 		XmlManager xml = new XmlManager();
 		WebClient webClient = new WebClient();
-		 webClient.setJavaScriptEnabled(Boolean.parseBoolean(xml.getSettings("//javascript/@value").get(0)));
-		 webClient.setAjaxController(new NicelyResynchronizingAjaxController());
-		 webClient.waitForBackgroundJavaScript(30000);
+		webClient.setJavaScriptEnabled(Boolean.parseBoolean(xml.getSettings(
+				"//javascript/@value").get(0)));
+		webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+		webClient.waitForBackgroundJavaScript(30000);
 		Map<String, List<String>> tags = new HashMap<String, List<String>>();
 		List<String> pages = xml.getSettings("//page/@value");
 		int i = 0;
@@ -37,34 +38,39 @@ public class DebugMain {
 		System.out.println(pages);
 		System.out.println(tags);
 		for (String s : pages) {
-			String filename=xml.getSettings("//page[@value='" + s + "']/classname/@value").get(0);
+			String filename = xml.getSettings(
+					"//page[@value='" + s + "']/classname/@value").get(0);
 			File test = new File(filename + ".java");
 			test.createNewFile();
 			BufferedWriter bw = new BufferedWriter(new FileWriter(test, true));
 			bw.write(" import org.openqa.selenium.WebElement;\n import org.openqa.selenium.support.FindBy;\n import org.openqa.selenium.support.How; \n");
-			bw.write("public final class "+filename+" {\n");
-			
-			HtmlPage page =webClient.getPage(s);
-			page=Chains.doAction(s,page);
-			
-			int j=0;
+			bw.write("public final class " + filename + " {\n");
+
+			HtmlPage page = webClient.getPage(s);
+			page = Chains.doAction(s, page);
+
+			int j = 0;
 			for (String st : tags.get(s)) {
-				List<HtmlElement> elements = (List<HtmlElement>) page.getByXPath("//"
-							+ st);
-				
-				
+				List<HtmlElement> elements = (List<HtmlElement>) page
+						.getByXPath("//" + st);
+
 				for (HtmlElement e : elements) {
-					String id=e.getId();
-					String res="";
-					if(!id.isEmpty()){
-						id="@id='"+id+"'";
-						res="[ "+id+" ]";
-					}
+					//String id = e.getId();
+					//String res = "";
+					//if (!id.isEmpty()) {
+						//id = "@id='" + id + "'";
+						//res = "[ " + id + " ]";
+					//}
 					bw.write("@FindBy(how = How.XPATH, using = \"");
-					bw.write(""
-							+e.getCanonicalXPath()+res);		
+					bw.write("" + e.getCanonicalXPath());
 					bw.write("\")\n");
-					bw.write("WebElement "+st.subSequence(0, st.indexOf("["))+j+";\n");
+					try {
+                       st=(String)st.subSequence(0, st.indexOf("["));
+					} catch (Exception e2) {
+						
+					}
+					bw.write("WebElement " + st
+							+ j + ";\n");
 					j++;
 				}
 			}
