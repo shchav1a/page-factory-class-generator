@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pages>
+<javascript value="true"/>
 	<page value="http://www.bing.com">
 	<classname value="BingPage"/>
 		<actions>
