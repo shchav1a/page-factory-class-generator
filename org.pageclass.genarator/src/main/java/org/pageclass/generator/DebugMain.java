@@ -41,7 +41,7 @@ public class DebugMain {
 			File test = new File(filename + ".java");
 			test.createNewFile();
 			BufferedWriter bw = new BufferedWriter(new FileWriter(test, true));
-			bw.write("import org.openqa.selenium.WebElement;\n import org.openqa.selenium.support.FindBy;\n import org.openqa.selenium.support.How; \n");
+			bw.write(" import org.openqa.selenium.WebElement;\n import org.openqa.selenium.support.FindBy;\n import org.openqa.selenium.support.How; \n");
 			bw.write("public final class "+filename+" {\n");
 			
 			HtmlPage page =webClient.getPage(s);
