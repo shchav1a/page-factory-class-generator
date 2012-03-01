@@ -43,7 +43,7 @@ public class DebugMain {
 			File test = new File(filename + ".java");
 			test.createNewFile();
 			BufferedWriter bw = new BufferedWriter(new FileWriter(test, true));
-			bw.write(xml.getSettings("//package/@value").get(0)+"\n");
+			bw.write("package "+xml.getSettings("//package/@value").get(0)+";\n");
 			bw.write("import org.openqa.selenium.WebElement;\nimport org.openqa.selenium.support.FindBy;\nimport org.openqa.selenium.support.How;\n\n");
 			bw.write("public final class " + filename + " {\n");
 
